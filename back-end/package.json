@@ -1,0 +1,19 @@
+{
+  "name": "reserve-api",
+  "version": "1.0.0",
+  "description": "api para para CRUD simples",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gabriel Calixto",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "pg": "^8.16.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

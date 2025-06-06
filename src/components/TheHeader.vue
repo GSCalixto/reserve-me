@@ -1,7 +1,7 @@
 <script>
 export default {
     setup (){
-        const msg = "header será aqui"
+        const msg = "Mesas disponiveis"
 
         return {
             msg
