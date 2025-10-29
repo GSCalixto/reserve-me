@@ -1,12 +1,5 @@
-//Instanciando servidor HTTP e websocket
+//Importando o servidor HTTP e o WebSocket, configurando a porta do servidor
+import {httpServer} from "./http.js";
+import "./webSocket.js";
 
-import express from 'express';
-const http = require("http");
-const { Server } = require("socket.io")
-
-const app = express();
-const httpServer  = http.createServer(app);
-
-const io = new Server( httpServer );
-
-export {httpServer, io};
+httpServer.listen(3000, () => { console.log("Server is running on port 3000") });
