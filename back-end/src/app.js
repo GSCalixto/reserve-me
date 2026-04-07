@@ -2,7 +2,7 @@
 import { httpServer, app } from "./http.js";
 import "./webSocket.js";
 
-import { selecionaRestaurante } from "./config/database.js";
+import { selecionaRestaurante, cadastraRestaurante, deletarRestaurante } from "./config/database.js";
 
 
 //const con = global.connection;
@@ -26,6 +26,34 @@ app.get('/restaurantes', async (req, res) => {
 
   } catch (error) {
     console.error('Erro ao processar a requisição:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+app.post('/cadastrar_restaurante', async (req, res) => { 
+  try {
+    const { name, email_address } = req.body;
+    console.log(req.body);
+    const novoRestaurante = await cadastraRestaurante(name, email_address);
+    res.status(201).json(novoRestaurante);
+  } catch (error) {
+    console.error('Erro ao cadastrar restaurante:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+app.delete('/deletar_restaurante/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const restauranteDeletado = await deletarRestaurante(id);
+    if (restauranteDeletado) {
+      res.json({ message: 'Restaurante deletado com sucesso', restaurante: restauranteDeletado });
+    } else {
+      res.status(404).json({ error: 'Restaurante não encontrado' });
+    };
+    // Lógica para deletar o restaurante com o ID especificado
+  } catch (error) {
+    console.error('Erro ao deletar restaurante:', error);
     res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });
