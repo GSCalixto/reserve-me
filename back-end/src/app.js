@@ -2,7 +2,7 @@
 import { httpServer, app } from "./http.js";
 import "./webSocket.js";
 
-import { selecionaRestaurante, cadastraRestaurante, deletarRestaurante } from "./config/database.js";
+import { selecionaRestaurante, cadastraRestaurante, deletarRestaurante, atualizarRestaurante } from "./config/database.js";
 
 
 //const con = global.connection;
@@ -57,6 +57,23 @@ app.delete('/deletar_restaurante/:id', async (req, res) => {
     res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });
+
+app.put('/atualizar_restaurante/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, email_address } = req.body;
+    const restauranteAtualizado = await atualizarRestaurante(id, name, email_address);
+    if (restauranteAtualizado) {
+      res.json({ message: 'Restaurante atualizado com sucesso', restaurante: restauranteAtualizado });
+    } else {
+      res.status(404).json({ error: 'Restaurante não encontrado' });
+    }
+  } catch (error) {
+    console.error('Erro ao atualizar restaurante:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
 
 app.use((err, req, res, next) => {
   console.error(err.stack); // Loga o erro completo para debug

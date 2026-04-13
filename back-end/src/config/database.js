@@ -12,12 +12,9 @@ async function connect() {
     connectionString: process.env.DATABASE_URL,
   });
 
-  const client = await pool.connect();
+  const res = await pool.query('SELECT NOW()');
   console.log('pool de conexão criado');
-
-  const res = await client.query('SELECT NOW()');
-  console.log( res.rows[0] );
-  client.release();
+  console.log(res.rows[0]);
 
   global.connection = pool;
   return await pool.connect();
@@ -63,7 +60,20 @@ async function deletarRestaurante(id) {
   };
 };
 
-export { selecionaRestaurante, cadastraRestaurante, deletarRestaurante, connect };
+async function atualizarRestaurante(id, nome, email_address) { 
+  const cliente = await connect();
+
+  try {
+    const texto = 'UPDATE restaurante SET name = $1, email_address = $2 WHERE id = $3 RETURNING *';
+    const values = [nome, email_address, id];
+    const result = await cliente.query(texto, values);
+    return result.rows[0];
+  } finally {
+    cliente.release();
+  };
+}
+
+export { selecionaRestaurante, cadastraRestaurante, deletarRestaurante, atualizarRestaurante, connect };
  
 
 // This code sets up a connection pool to a PostgreSQL database using the 'pg' library.
